@@ -12,6 +12,8 @@ const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
 
+app.use(require('./middleware/headers'))
+
 app.use(express.static(__dirname + '/public'))
 console.log(__dirname)
 

@@ -7,8 +7,8 @@ var jwt = require('jsonwebtoken');
 
 router.post('/createuser', function (req, res) {
 
-    var username = "Jessika";
-    var pass = "what";
+    var username = req.body.user.username;
+    var pass = req.body.user.password;
 
     User.create({
         username: username,
@@ -52,7 +52,7 @@ router.post('/signin', function (req, res) {
             }
         },
         function (err) {
-            res.status(501).status.send({ error: "you failed, yo" })
+            res.status(501).status.send({ error: "you failed" })
         }
     );
 });

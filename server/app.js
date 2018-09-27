@@ -19,7 +19,7 @@ app.use('/test', test);
 app.use('/api/user', user);
 
 app.use(require('./middleware/validate-session'));
-app.use('/authtest', authTest);
+app.use('/authtest', authtest);
 
 app.listen(3003, function () {
     console.log('App is listening on 3003.')
