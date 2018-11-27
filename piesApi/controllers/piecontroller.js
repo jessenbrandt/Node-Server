@@ -1,8 +1,10 @@
 let router = require('express').Router();
 const Pie = require('../db').import('../models/pie')
 
-router.get('/' , (req, res) => res.send('I love pie!'))
-router.get('/tasty' , (req, res) => res.send('Pies taste really good'))
+const validateSession = require('../middleware/validate-session')
+
+// router.get('/' , (req, res) => res.send('I love pie!'))
+// router.get('/tasty' , (req, res) => res.send('Pies taste really good'))
 
 router.get('/', (req, res) => (
     Pie.findAll()
@@ -10,7 +12,7 @@ router.get('/', (req, res) => (
         .catch(err => res.status(500).json({ error: err }))
 ))
 
-router.post('/', (req, res) => {
+router.post('/', validateSession, (req, res) => {
     if (!req.errors) {
         const pieFromRequest = {
             nameOfPie: req.body.nameOfPie,
@@ -25,7 +27,7 @@ router.post('/', (req, res) => {
             .then(pie => res.status(200).json(pie))
             .catch(err => res.json(req.errors))
     } else {
-        res.status(500).json(reg.errors)
+        res.status(500).json(req.errors)
     }
 })
 
@@ -35,7 +37,7 @@ router.get('/:nameOfPie', (req, res) => {
       .catch(err => res.status(500).json({ error: err}))
   })
   
-  router.put('/:id', (req, res) => {
+  router.put('/:id', validateSession, (req, res) => {
     if (!req.errors) {
       Pie.update(req.body, { where: { id: req.params.id }})
         .then(pie => res.status(200).json(pie))
@@ -45,7 +47,7 @@ router.get('/:nameOfPie', (req, res) => {
     }
   });
 
-  router.delete('/:id', (req, res) => {
+  router.delete('/:id', validateSession, (req, res) => {
     Pie.destroy({where: {id: req.params.id}})
     .then(pie => res.status(200).json(pie))
     .catch(err => res.status(500).json({error: err}))
